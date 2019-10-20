@@ -1,0 +1,93 @@
+import copy
+from sys import stdin
+
+
+class Matrix:
+
+    def __init__(self, listOfLists):
+        self.mat = copy.deepcopy(listOfLists)
+
+    def __str__(self):
+        string = '\n'.join('\t'.join(map(str, row)) for row in self.mat)
+        return string
+
+    def size(self):
+        m = len(self.mat)
+        n = len(self.mat[0])
+        return (m, n)
+
+    def __add__(self, other):
+        if (type(other) is not Matrix):
+            other = Matrix(other)
+        if (self.size() == other.size()):
+            matAnsw = []
+            for i in range(len(self.mat)):
+                matAnsw.append([])
+                for j in range(len(self.mat[0])):
+                    matAnsw[i].append(self.mat[i][j] + other.mat[i][j])
+        else:
+            raise MatrixError(self, other)
+        return Matrix(matAnsw)
+
+    def __mul__(self, other):
+        matAnsw = []
+        if isinstance(other, int) or isinstance(other, float):
+            for i in range(len(self.mat)):
+                matAnsw.append([])
+                for j in range(len(self.mat[i])):
+                    matAnsw[i].append(self.mat[i][j] * other)
+            return Matrix(matAnsw)
+        elif isinstance(other, Matrix) and len(self.mat[0]) == len(other.mat):
+            for i in range(len(self.mat)):
+                matAnsw.append([])
+                for j in range(len(other.mat[0])):
+                    answNum = 0
+                    matAnsw[i].append(0)
+                    for k in range(len(other.mat)):
+                        answNum += self.mat[i][k] * other.mat[k][j]
+                        matAnsw[i][j] = answNum
+        else:
+            raise MatrixError(self, other)
+        return Matrix(matAnsw)
+
+        for i in range(len(self.mat)):
+            matAnsw.append([])
+            for j in range(len(self.mat[i])):
+                matAnsw[i].append(self.mat[i][j] * other)
+        return Matrix(matAnsw)
+    __rmul__ = __mul__
+
+    def transpose(self):
+        newMat = []
+        for i in range(len(self.mat[0])):
+            newMat.append([])
+            for j in range(len(self.mat)):
+                newMat[i].append(0)
+
+        for i in range(len(self.mat)):
+            for j in range(len(self.mat[0])):
+                newMat[j][i] = self.mat[i][j]
+        self.mat = newMat
+        return self
+
+    @staticmethod
+    def transposed(matrix):
+        newMat = []
+        for i in range(len(matrix.mat[0])):
+            newMat.append([])
+            for j in range(len(matrix.mat)):
+                newMat[i].append(0)
+        for i in range(len(matrix.mat)):
+            for j in range(len(matrix.mat[0])):
+                newMat[j][i] += matrix.mat[i][j]
+        return Matrix(newMat)
+
+
+class MatrixError(BaseException):
+    def __init__(self, matrix1, matrix2):
+        self.matrix1 = matrix1
+        self.matrix2 = matrix2
+
+
+exec(stdin.read())
+
