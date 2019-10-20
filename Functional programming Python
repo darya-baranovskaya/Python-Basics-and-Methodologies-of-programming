@@ -1,0 +1,25 @@
+#1
+#returns sequence wich C = (c1, c2, ..., cn), where ci is an XOR() of column number i
+from functools import reduce
+print(*map(lambda a: reduce(lambda b, c: (b + c) % 2, a), zip(*map(lambda s: list(map(int, s.split())), open('input.txt', 'r', encoding='utf8').readlines()[1:]))))
+
+#2
+#returns creation of 5th power of each sequence's element
+from _functools import reduce
+print(reduce(lambda a, b: a * b, map(lambda x: x ** 5, map(int, input().split()))))
+
+#3
+#returns a sequence of purtial sums of elemants from first to the elem with a same namber in given sequence
+from itertools import accumulate
+print(*accumulate(map(int, input().split()), lambda a, b: a + b))
+
+
+#4
+#returns all permutations a given length
+from itertools import permutations
+print('\n'.join(map(lambda x: ''.join(map(str, x)), permutations(range(1, int(open('input.txt', 'r', encoding='utf8').read()) + 1)))))
+
+
+#5
+#returns a number of different elements in a given sequence
+print(len(set(list(map(int, input().split())))))
